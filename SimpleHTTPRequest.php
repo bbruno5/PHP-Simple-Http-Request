@@ -195,7 +195,7 @@ class Request {
 		$i = curl_init();
 		curl_setopt($i, CURLOPT_URL, $this->url);
 		curl_setopt($i, CURLOPT_VERBOSE, 1);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+		curl_setopt($i, CURLOPT_CUSTOMREQUEST, "GET");
 		
 		if ($this->user && $this->password) {
 			
@@ -264,13 +264,13 @@ class Request {
 		$i = curl_init();
 		curl_setopt($i, CURLOPT_URL, $this->url);
 		curl_setopt($i, CURLOPT_VERBOSE, 1);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($i, CURLOPT_CUSTOMREQUEST, "POST");
 		
 		if ($this->sendAsJsonData) {
 			
 			$params = json_encode($this->params);
 			curl_setopt($i, CURLOPT_POSTFIELDS, json_encode($this->params));
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+			curl_setopt($i, CURLOPT_HTTPHEADER, array(                                                                          
 				'Content-Type: application/json',                                                                                
 				'Content-Length: ' . strlen($params))                                                                       
 			);
@@ -346,13 +346,13 @@ class Request {
 		$i = curl_init();
 		curl_setopt($i, CURLOPT_URL, $this->url);
 		curl_setopt($i, CURLOPT_VERBOSE, 1);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+		curl_setopt($i, CURLOPT_CUSTOMREQUEST, "PUT");
 		
 		if ($this->sendAsJsonData) {
 			
 			$params = json_encode($this->params);
 			curl_setopt($i, CURLOPT_POSTFIELDS, json_encode($this->params));
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+			curl_setopt($i, CURLOPT_HTTPHEADER, array(                                                                          
 				'Content-Type: application/json',                                                                                
 				'Content-Length: ' . strlen($params))                                                                       
 			);
