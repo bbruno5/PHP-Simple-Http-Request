@@ -155,6 +155,10 @@ class Request {
 		$this->fixBodyContent = $fixBodyContent;
 	}
 	
+	private function console_log($data){
+		echo '<script>console.log('. json_encode($data) .');</script>';
+	}
+	
 	/**
 	* Makes CURL GET request.
 	*
@@ -204,7 +208,7 @@ class Request {
 		
 		curl_setopt($i, CURLOPT_SSL_VERIFYPEER, $this->verifySSLPeer);
 		curl_setopt($i, CURLOPT_SSL_VERIFYHOST, $this->verifySSLHost);
-		curl_setopt($i, CURLOPT_HEADER, $headers);
+		curl_setopt($i, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($i, CURLOPT_RETURNTRANSFER, 1);
 		
 		$response = curl_exec($i);
@@ -226,14 +230,20 @@ class Request {
 			
 			$body = substr_replace($body, "", 0, 1);
 			$body = substr_replace($body, "", -1);
+			
+			$arr = array(
+				"headers" => $header,
+				"body" => json_decode($body, true)
+			);
+			return json_decode(json_encode($arr), true);
+		} else {
+			$arr = array(
+				"headers" => $header,
+				"body" => $body
+			);
+			return $arr;
 		}
-		
-		$arr = array(
-			"headers" => $header,
-			"body" => json_decode($body, true)
-		);
-		
-		return json_decode(json_encode($arr), true);
+		return false;
 	}
 	
 	/**
@@ -265,18 +275,13 @@ class Request {
 		curl_setopt($i, CURLOPT_URL, $this->url);
 		curl_setopt($i, CURLOPT_VERBOSE, 1);
 		curl_setopt($i, CURLOPT_CUSTOMREQUEST, "POST");
-		
 		if ($this->sendAsJsonData) {
-			
 			$params = json_encode($this->params);
-			curl_setopt($i, CURLOPT_POSTFIELDS, json_encode($this->params));
-			curl_setopt($i, CURLOPT_HTTPHEADER, array(                                                                          
-				'Content-Type: application/json',                                                                                
-				'Content-Length: ' . strlen($params))                                                                       
-			);
+			curl_setopt($i, CURLOPT_POSTFIELDS, $params);
+			array_push($headers, 'Content-Length: ' . strlen($params));
 		} else {
-			
 			curl_setopt($i, CURLOPT_POSTFIELDS, http_build_query($this->params));
+			array_push($headers, 'Content-Length: ' . strlen($params));
 		}
 		
 		if ($this->user && $this->password) {
@@ -286,7 +291,7 @@ class Request {
 		
 		curl_setopt($i, CURLOPT_SSL_VERIFYPEER, $this->verifySSLPeer);
 		curl_setopt($i, CURLOPT_SSL_VERIFYHOST, $this->verifySSLHost);
-		curl_setopt($i, CURLOPT_HEADER, $headers);
+		curl_setopt($i, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($i, CURLOPT_RETURNTRANSFER, 1);
 		
 		$response = curl_exec($i);
@@ -308,14 +313,20 @@ class Request {
 			
 			$body = substr_replace($body, "", 0, 1);
 			$body = substr_replace($body, "", -1);
+			
+			$arr = array(
+				"headers" => $header,
+				"body" => json_decode($body, true)
+			);
+			return json_decode(json_encode($arr), true);
+		} else {
+			$arr = array(
+				"headers" => $header,
+				"body" => $body
+			);
+			return $arr;
 		}
-		
-		$arr = array(
-			"headers" => $header,
-			"body" => json_decode($body, true)
-		);
-		
-		return json_decode(json_encode($arr), true);
+		return false;
 	}
 	
 	/**
@@ -350,15 +361,11 @@ class Request {
 		
 		if ($this->sendAsJsonData) {
 			
-			$params = json_encode($this->params);
 			curl_setopt($i, CURLOPT_POSTFIELDS, json_encode($this->params));
-			curl_setopt($i, CURLOPT_HTTPHEADER, array(                                                                          
-				'Content-Type: application/json',                                                                                
-				'Content-Length: ' . strlen($params))                                                                       
-			);
+			array_push($headers, 'Content-Length: ' . strlen($params));
 		} else {
-			
 			curl_setopt($i, CURLOPT_POSTFIELDS, http_build_query($this->params));
+			array_push($headers, 'Content-Length: ' . strlen($params));
 		}
 		
 		if ($this->user && $this->password) {
@@ -368,7 +375,7 @@ class Request {
 		
 		curl_setopt($i, CURLOPT_SSL_VERIFYPEER, $this->verifySSLPeer);
 		curl_setopt($i, CURLOPT_SSL_VERIFYHOST, $this->verifySSLHost);
-		curl_setopt($i, CURLOPT_HEADER, $headers);
+		curl_setopt($i, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($i, CURLOPT_RETURNTRANSFER, 1);
 		
 		$response = curl_exec($i);
@@ -390,74 +397,62 @@ class Request {
 			
 			$body = substr_replace($body, "", 0, 1);
 			$body = substr_replace($body, "", -1);
+			
+			$arr = array(
+				"headers" => $header,
+				"body" => json_decode($body, true)
+			);
+			return json_decode(json_encode($arr), true);
+		} else {
+			$arr = array(
+				"headers" => $header,
+				"body" => $body
+			);
+			return $arr;
 		}
-		
-		$arr = array(
-			"headers" => $header,
-			"body" => json_decode($body, true)
-		);
-		
-		return json_decode(json_encode($arr), true);
+		return false;
 	}
 	
 	private function structure($args) {
 		
 		if ($args['url'] != null) {
-			
 			$this->url = $args['url'];
 		}
 		
 		if ($args['params'] != null) {
-			
 			$this->params = $args['params'];
 		}
 		
 		if ($args['headers'] != null) {
-			
 			$this->headers = $args['headers'];
 		}
 		
 		if ($args['user'] != null) {
-			
 			$this->user = $args['user'];
 		}
 		
 		if ($args['password'] != null) {
-			
 			$this->password = $args['password'];
 		}
 		
 		if ($args['verifySSLPeer'] != null) {
-			
 			$this->verifySSLPeer = $args['verifySSLPeer'];
 		}
 		
 		if ($args['verifySSLHost'] != null) {
-			
 			if ($args['verifySSLHost'] == true) {
-				
 				$args['verifySSLHost'] = 2;
 			}
-			
 			$this->verifySSLHost = $args['verifySSLHost'];
 		}
 		
 		if ($args['sendAsJsonData'] != null) {
-			
-			$this->fixBodyContent = $args['fixBodyContent'];
+			$this->sendAsJsonData = $args['sendAsJsonData'];
 		}
 		
 		if ($args['fixBodyContent'] != null) {
-			
 			$this->fixBodyContent = $args['fixBodyContent'];
 		}
-	}
-	
-	private function console_log($data){
-		
-		echo '<script>';
-		echo 'console.log('. json_encode($data) .')';
-		echo '</script>';
 	}
 }
 
